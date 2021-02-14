@@ -8,7 +8,7 @@ COPY package*.json ./
 
 RUN npm install
 
-RUN npm i -g npm
+RUN npm i npm
 
 COPY . .
 
