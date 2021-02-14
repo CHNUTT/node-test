@@ -1,3 +1,3 @@
-import productRoutes from './product.routes.js';
+const productRoutes = require('./product.routes');
 
-export default { productRoutes };
+module.exports = { productRoutes };

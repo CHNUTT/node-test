@@ -1,8 +1,8 @@
-import express from 'express';
-import services from '../../services/index.js';
+const express = require('express');
+const services = require('../../services/index');
 
 const Router = express.Router();
 
 Router.get('/', services.productController.getProduct);
 
-export default Router;
+module.exports = Router;

@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "jest",
+    "test-dev":"jest --watch",
     "start": "node src/app.js",
     "dev": "nodemon src/app.js"
   },
@@ -23,6 +24,5 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
-  },
-  "type": "module"
+  }
 }

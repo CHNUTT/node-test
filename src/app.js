@@ -1,8 +1,8 @@
-import express from 'express';
+const express = require('express');
 const app = express();
 
 // Load routes
-import routes from './apis/routes/index.js';
+const routes = require('./apis/routes/index');
 
 app.use('/products', routes.productRoutes);
 

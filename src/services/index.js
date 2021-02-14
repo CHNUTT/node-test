@@ -1,3 +1,3 @@
-import productController from './product.service.js';
+const productController = require('./product.service');
 
-export default { productController };
+module.exports = { productController };

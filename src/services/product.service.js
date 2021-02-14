@@ -1,5 +1,7 @@
+const add = require('./calculation/add');
+
 const getProduct = (req, res, next) => {
-  res.send('The is getProduct route');
+  res.send(`10 + 20 = ${add(10, 20)}`);
 };
 
-export default { getProduct };
+module.exports = { getProduct };
