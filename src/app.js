@@ -7,6 +7,10 @@ const routes = require('./apis/routes/index');
 
 app.use('/products', routes.productRoutes);
 
+app.use('/', (req, res, next) => {
+  res.send('application is up and running!');
+});
+
 app.listen(PORT, () =>
   console.log(`Your application is running on port ${PORT}`)
 );
