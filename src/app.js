@@ -5,8 +5,10 @@ const { PORT = 4500 } = process.env;
 // Load routes
 const routes = require('./apis/routes/index');
 
+// Product routes
 app.use('/products', routes.productRoutes);
 
+// Health route
 app.use('/', (req, res, next) => {
   res.send('application is up and running!');
 });
