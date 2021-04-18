@@ -1,8 +1,9 @@
 const express = require('express');
-const services = require('../../services/index');
+const ProductController = require('../../controllers/product.controllers');
 
-const Router = express.Router();
+const router = express.Router();
 
-Router.get('/', services.productController.getProduct);
-
-module.exports = Router;
+module.exports = (app) => {
+  router.get('/products', ProductController.getProduct);
+  app.use('/api', router);
+};

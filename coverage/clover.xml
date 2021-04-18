@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1618704264915" clover="3.2.0">
+  <project timestamp="1618704264917" name="All files">
+    <metrics statements="35" coveredstatements="31" conditionals="5" coveredconditionals="2" methods="8" coveredmethods="6" elements="48" coveredelements="39" complexity="0" loc="35" ncloc="35" packages="4" files="7" classes="7"/>
+    <package name="src">
+      <metrics statements="13" coveredstatements="10" conditionals="5" coveredconditionals="2" methods="2" coveredmethods="1"/>
+      <file name="server.js" path="/app/src/server.js">
+        <metrics statements="13" coveredstatements="10" conditionals="5" coveredconditionals="2" methods="2" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.apis.routes">
+      <metrics statements="16" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+      <file name="health.routes.js" path="/app/src/apis/routes/health.routes.js">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+      </file>
+      <file name="index.js" path="/app/src/apis/routes/index.js">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+      </file>
+      <file name="product.routes.js" path="/app/src/apis/routes/product.routes.js">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.controllers">
+      <metrics statements="4" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+      <file name="health.controllers.js" path="/app/src/controllers/health.controllers.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+      </file>
+      <file name="product.controllers.js" path="/app/src/controllers/product.controllers.js">
+        <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.utils">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="rootDir.js" path="/app/src/utils/rootDir.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

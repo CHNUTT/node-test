@@ -1,3 +1,1 @@
-const productController = require('./product.service');
-
-module.exports = { productController };
+module.exports = { };
