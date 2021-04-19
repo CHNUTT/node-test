@@ -1,0 +1,38 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "database_development",
+    "host": "db",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "database_development",
+    "host": "db",
+    "dialect": "postgres",
+    "logging": false
+  },
+  "testci": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "database_development",
+    "host": "localhost",
+    "dialect": "postgres",
+    "logging": false
+  },
+  "production": {
+    "production": true,
+    "username": "RDS_PG_DB_USER",
+    "password": "RDS_PG_DB_PASSWORD",
+    "database": "RDS_PG_DB",
+    "host": "RDS_PG_DB_HOST_TEST",
+    "dialect": "RDS_PG_DIALECT",
+    "dialectOptions": {
+      "ssl": {
+        "rejectUnauthorized": false
+      }
+    }
+  }
+}

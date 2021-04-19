@@ -1,0 +1,17 @@
+[
+  {
+    "location": "body",
+    "msg": "Invalid value",
+    "param": "firstName"
+  },
+  {
+    "location": "body",
+    "msg": "Invalid value",
+    "param": "lastName"
+  },
+  {
+    "location": "body",
+    "msg": "Invalid value",
+    "param": "email"
+  }
+]
