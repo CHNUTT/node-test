@@ -1,7 +1,7 @@
-const productRoutes = require('./product.routes');
+const userRoutes = require('./user.routes');
 const healthRoutes = require('./health.routes');
 
 module.exports = (app, server) => {
-  productRoutes(app);
+  userRoutes(app);
   healthRoutes(app);
 };
