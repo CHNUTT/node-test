@@ -9,7 +9,7 @@
   "test": {
     "username": "postgres",
     "password": "postgres",
-    "database": "database_testing",
+    "database": "database_test",
     "host": "db",
     "dialect": "postgres",
     "logging": false
@@ -17,7 +17,7 @@
   "testci": {
     "username": "postgres",
     "password": "postgres",
-    "database": "database_testing",
+    "database": "database_test",
     "host": "localhost",
     "dialect": "postgres",
     "logging": false
