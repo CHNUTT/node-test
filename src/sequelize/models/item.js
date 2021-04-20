@@ -1,16 +1,20 @@
 module.exports = (sequelize, DataTypes) => {
-  const Item = sequelize.define('Item', {
-    title: DataTypes.STRING,
-    link: DataTypes.STRING,
-    userId: {
+  const Item = sequelize.define('item', {
+    id: {
       type: DataTypes.INTEGER,
-      references: {
-        model: 'User',
-        key: 'id',
-        as: 'userId',
-      }
-    }
-  }, {});
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    link: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  });
   Item.associate = function (models) {
     // associations can be defined here
     Item.belongsTo(models.User, {

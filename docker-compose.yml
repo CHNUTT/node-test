@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  server:
+    container_name: prod_prototype
+    build: .
+    image: prod_prototype
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - 3000:3000

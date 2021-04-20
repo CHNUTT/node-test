@@ -20,9 +20,16 @@ exports.createUser = async (req, res, next) => {
     });
     if (!createdUser) throw createError();
 
-    delete createdUser.password;
+    const user = {
+      id: createdUser.id,
+      firstName: createdUser.firstName,
+      lastName: createdUser.lastName,
+      email: createdUser.email,
+      createdAt: createdUser.createdAt,
+      updatedAt: createdUser.updatedAt,
+    };
 
-    res.status(201).json({ createdUser });
+    res.status(201).json({ createdUser: user });
   } catch (err) {
     next(err);
   }

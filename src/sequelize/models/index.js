@@ -1,5 +1,6 @@
 'use strict';
 
+require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
@@ -9,8 +10,25 @@ const config = require('../config/config.json')[env];
 const db = {};
 
 let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+
+if (config.production) {
+  sequelize = new Sequelize(
+    process.env[config.database],
+    process.env[config.username],
+    process.env[config.password],
+    {
+      host: process.env[config.host],
+      dialect: process.env[config.dialect],
+      dialectOptions: {
+        // ssl: 'Amazon RDS',
+        useUTC: false,
+      },
+      pool: { maxConnections: 5, maxIdleTime: 30 },
+      language: 'en',
+      maxConcurrentQueries: 100,
+      timezone: '-5:00',
+    }
+  );
 } else {
   sequelize = new Sequelize(
     config.database,
@@ -31,7 +49,7 @@ fs.readdirSync(__dirname)
       sequelize,
       Sequelize.DataTypes
     );
-    db[model.name] = model;
+    db[model.name[0].toUpperCase() + model.name.slice(1).toLowerCase()] = model;
   });
 
 Object.keys(db).forEach((modelName) => {
