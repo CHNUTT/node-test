@@ -4,7 +4,7 @@
   "description": "Very simple Node js app to test CI/CD docker",
   "main": "server.js",
   "scripts": {
-    "test": "jest",
+    "test": "NODE_ENV=testci PORT=3005 jest --verbose --coverage --detectOpenHandles --maxWorkers=1 --testTimeout=10000",
     "test-dev": "NODE_ENV=test PORT=3005 jest --verbose --watchAll --coverage --detectOpenHandles --maxWorkers=1 --testTimeout=10000",
     "start": "NODE_ENV=production node src/server.js",
     "start-dev": "NODE_ENV=production nodemon src/server.js",
