@@ -5,7 +5,6 @@ describe('GET / - Check application health', () => {
     const app = await require('../../../src/server')();
     const res = await request(app)
       .get('/')
-      .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(200);
 

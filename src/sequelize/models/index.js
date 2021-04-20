@@ -49,7 +49,8 @@ fs.readdirSync(__dirname)
       sequelize,
       Sequelize.DataTypes
     );
-    db[model.name[0].toUpperCase() + model.name.slice(1).toLowerCase()] = model;
+    // db[model.name[0].toUpperCase() + model.name.slice(1).toLowerCase()] = model;
+    db[model.name] = model;
   });
 
 Object.keys(db).forEach((modelName) => {
