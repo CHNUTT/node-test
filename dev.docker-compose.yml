@@ -1,0 +1,38 @@
+version: '3.8'
+
+services: 
+  server:
+    container_name: dev_prototype
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    image: dev_prototype
+    depends_on: 
+      - db
+    ports: 
+      - 4000:3000
+    volumes: 
+      - .:/app
+      - /app/node_modules
+  
+  db:
+    image: 'postgres:alpine'
+    environment: 
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    volumes: 
+      - ./data/postgressql:/var/lib/postgresql/data
+
+  pgadmin:
+    image: 'dpage/pgadmin4'
+    environment: 
+      PGADMIN_DEFAULT_EMAIL: test@nemaco.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    depends_on: 
+      - db
+    ports:
+      - 4001:80
+    volumes: 
+      - ./data/pgadmin:/var/lib/pgadmin

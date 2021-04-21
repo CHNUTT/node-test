@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "firstName": "Bruno",
+    "lastName": "Doe",
+    "email": "bruno@doe.com",
+    "password": "123456789",
+    "createdAt": "new Date",
+    "updatedAt": "new Date"
+  },
+  {
+    "id": 2,
+    "firstName": "Emre",
+    "lastName": "Smith",
+    "email": "emre@smith.com",
+    "password": "123456789",
+    "createdAt": "new Date",
+    "updatedAt": "new Date"
+  },
+  {
+    "id": 3,
+    "firstName": "John",
+    "lastName": "Stone",
+    "email": "john@stone.com",
+    "password": "123456789",
+    "createdAt": "new Date",
+    "updatedAt": "new Date"
+  }
+]
