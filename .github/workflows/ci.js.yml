@@ -1,0 +1,46 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  mergedev:
+    runs-on: ubuntu-latest
+    # container: node:latest
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 15.x]
+    # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      db:
+        # Docker Hub image
+        image: postgres:13
+        # Provide the password for postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: database_test
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      # - name: install all packages
+      #   run: npm install
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
