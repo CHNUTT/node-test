@@ -1,0 +1,62 @@
+name: Pre CD with EB and RDS Test env
+
+on:
+  pull_request:
+    branchs: [ master ]
+
+jobs:
+  test-pre-cd:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    env:
+      RDS_PG_DB_USER_TEST: ${{ secrets.RDS_PG_DB_USER_TEST }}
+      RDS_PG_DB_PASSWORD_TEST: ${{ secrets.RDS_PG_DB_PASSWORD_TEST }}
+      RDS_PG_DB_TEST: ${{ secrets.RDS_PG_DB_TEST }}
+      RDS_PG_DB_HOST_TEST: ${{ secrets.RDS_PG_DB_HOST_TEST }}
+      RDS_PG_DIALECT_TEST: ${{ secrets.RDS_PG_DIALECT_TEST }}
+
+    steps:
+      # - name: Configure AWS credentials from Test Environment
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-2
+
+      
+      # while status is not available keep checking before move to next step
+
+      # if not go checkout code
+
+      # check the status is stop if it is start it
+      # - name: start rds postgres test database if it is in stopped stage
+      #   if: ${{aws rds describe-db-instances --db-instance-identifier pg-test-env --region us-east-2 | grep DBInstanceStatus == "stopped"}}
+      #   run: aws rds start-db-instance --db-instance-identifier pg-test-env --region us-east-2
+      
+      # - name: ensure rds is available before continue
+      #   if: ${{aws rds describe-db-instances --db-instance-identifier pg-test-env --region us-east-2 | grep DBInstanceStatus != "available"}}
+      #   uses: jakejarvis/wait-action@master
+      #   with:
+      #     time: '300s'
+
+      # - name: Create .env file
+      #   run: touch .env
+      #   run: echo RDS_PG_DB_USER = ${{ secrets.RDS_PG_DB_USER }}
+      #   run: echo RDS_PG_DB_PASSWORD = ${{ secrets.RDS_PG_DB_PASSWORD }}
+      #   run: echo RDS_PG_DB = ${{ secrets.RDS_PG_DB }}
+      #   run: echo RDS_PG_DB_HOST_TEST = ${{ secrets.RDS_PG_DB_HOST_TEST }}
+      #   run: echo RDS_PG_DIALECT = ${{ secrets.RDS_PG_DIALECT }}
+
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm run test-cd
+
+      # - name: stop rds postgres test database
+      #   run: aws rds stop-db-instance --db-instance-identifier pg-test-env --region us-east-2

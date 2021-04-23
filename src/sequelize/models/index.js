@@ -23,6 +23,7 @@ if (config.production) {
         // ssl: 'Amazon RDS',
         useUTC: false,
       },
+      ...(config.testproduction && { logging: false }),
       pool: { maxConnections: 5, maxIdleTime: 30 },
       language: 'en',
       maxConcurrentQueries: 100,

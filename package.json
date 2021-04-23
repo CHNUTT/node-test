@@ -6,6 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=testci jest --verbose --coverage --detectOpenHandles --maxWorkers=1 --testTimeout=10000",
     "pretest": "NODE_ENV=testci npm run db:reset",
+    "test-cd": "NODE_ENV=testcd jest --verbose --coverage --detectOpenHandles --maxWorkers=1 --testTimeout=10000 --forceExit",
     "test-dev": "NODE_ENV=test PORT=3005 jest --verbose --watchAll --coverage --detectOpenHandles --maxWorkers=1 --testTimeout=10000",
     "pretest-dev": "NODE_ENV=test npm run db:reset",
     "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
@@ -24,6 +25,7 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.10.0",
