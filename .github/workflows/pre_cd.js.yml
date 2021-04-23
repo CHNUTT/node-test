@@ -1,75 +1,62 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Node.js Testing Pre CD
+name: Pre CD with EB and RDS Test env
 
 on:
   pull_request:
-    branches: [ master ]
+    branchs: [ master ]
 
 jobs:
   test-pre-cd:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [12.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-    
-    # Service containers to run with `container-job`
-    services:
-      # Label used to access the service container
-      db:
-        # Docker Hub image
-        image: postgres:13
-        # Provide the password for postgres
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: database_test
-        ports:
-          - 5432:5432
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    env:
+      RDS_PG_DB_USER_TEST: ${{ secrets.RDS_PG_DB_USER_TEST }}
+      RDS_PG_DB_PASSWORD_TEST: ${{ secrets.RDS_PG_DB_PASSWORD_TEST }}
+      RDS_PG_DB_TEST: ${{ secrets.RDS_PG_DB_TEST }}
+      RDS_PG_DB_HOST_TEST: ${{ secrets.RDS_PG_DB_HOST_TEST }}
+      RDS_PG_DIALECT_TEST: ${{ secrets.RDS_PG_DIALECT_TEST }}
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      # - name: Configure AWS credentials from Test Environment
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-2
 
-    # - name: Generate deployment package
-    #   run: zip -r deploy.zip . -x '*.git*' '**node_modules**'
       
-    # - name: Get timestamp
-    #   uses: gerred/actions/current-time@master
-    #   id: current-time
-        
-    # - name: Run string replace
-    #   uses: frabert/replace-string-action@master
-    #   id: format-time
-    #   with:
-    #     pattern: '[:\.]+'
-    #     string: "${{ steps.current-time.outputs.time }}"
-    #     replace-with: '-'
-    #     flags: 'g'
+      # while status is not available keep checking before move to next step
+
+      # if not go checkout code
+
+      # check the status is stop if it is start it
+      # - name: start rds postgres test database if it is in stopped stage
+      #   if: ${{aws rds describe-db-instances --db-instance-identifier pg-test-env --region us-east-2 | grep DBInstanceStatus == "stopped"}}
+      #   run: aws rds start-db-instance --db-instance-identifier pg-test-env --region us-east-2
       
-    # - name: Deploy to EB
-    #   uses: einaregilsson/beanstalk-deploy@v16
-    #   with:
-    #     aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #     application_name: experiment-node-js
-    #     environment_name: Experimentnodejs-env-1
-    #     version_label: "node-js-experimental-${{ steps.format-time.outputs.replaced }}"
-    #     region: us-east-2
-    #     deployment_package: deploy.zip
+      # - name: ensure rds is available before continue
+      #   if: ${{aws rds describe-db-instances --db-instance-identifier pg-test-env --region us-east-2 | grep DBInstanceStatus != "available"}}
+      #   uses: jakejarvis/wait-action@master
+      #   with:
+      #     time: '300s'
+
+      # - name: Create .env file
+      #   run: touch .env
+      #   run: echo RDS_PG_DB_USER = ${{ secrets.RDS_PG_DB_USER }}
+      #   run: echo RDS_PG_DB_PASSWORD = ${{ secrets.RDS_PG_DB_PASSWORD }}
+      #   run: echo RDS_PG_DB = ${{ secrets.RDS_PG_DB }}
+      #   run: echo RDS_PG_DB_HOST_TEST = ${{ secrets.RDS_PG_DB_HOST_TEST }}
+      #   run: echo RDS_PG_DIALECT = ${{ secrets.RDS_PG_DIALECT }}
+
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm run test-cd
+
+      # - name: stop rds postgres test database
+      #   run: aws rds stop-db-instance --db-instance-identifier pg-test-env --region us-east-2
