@@ -22,13 +22,28 @@
     "dialect": "postgres",
     "logging": false
   },
+  "testcd": {
+    "production": true,
+    "testproduction": true,
+    "username": "RDS_PG_DB_USER_TEST",
+    "password": "RDS_PG_DB_PASSWORD_TEST",
+    "database": "RDS_PG_DB_TEST",
+    "host": "RDS_PG_DB_HOST_TEST",
+    "logging": false,
+    "dialect": "RDS_PG_DIALECT_TEST",
+    "dialectOptions": {
+      "ssl": {
+        "rejectUnauthorized": false
+      }
+    }
+  },
   "production": {
     "production": true,
-    "username": "RDS_PG_DB_USER",
-    "password": "RDS_PG_DB_PASSWORD",
-    "database": "RDS_PG_DB",
-    "host": "RDS_PG_DB_HOST_TEST",
-    "dialect": "RDS_PG_DIALECT",
+    "username": "RDS_PG_DB_USER_PROD",
+    "password": "RDS_PG_DB_PASSWORD_PROD",
+    "database": "RDS_PG_DB_PROD",
+    "host": "RDS_PG_DB_HOST_PROD",
+    "dialect": "RDS_PG_DIALECT_PROD",
     "dialectOptions": {
       "ssl": {
         "rejectUnauthorized": false
