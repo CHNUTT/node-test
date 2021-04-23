@@ -22,6 +22,20 @@
     "dialect": "postgres",
     "logging": false
   },
+  "testcd": {
+    "production": true,
+    "username": "RDS_PG_DB_USER",
+    "password": "RDS_PG_DB_PASSWORD",
+    "database": "RDS_PG_DB",
+    "host": "RDS_PG_DB_HOST_TEST",
+    "logging": false,
+    "dialect": "RDS_PG_DIALECT",
+    "dialectOptions": {
+      "ssl": {
+        "rejectUnauthorized": false
+      }
+    }
+  },
   "production": {
     "production": true,
     "username": "RDS_PG_DB_USER",
