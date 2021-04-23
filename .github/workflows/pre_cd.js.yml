@@ -11,6 +11,12 @@ jobs:
   test-pre-cd:
 
     runs-on: ubuntu-latest
+    env:
+      RDS_PG_DB_USER: ${{ secrets.RDS_PG_DB_USER }}
+      RDS_PG_DB_PASSWORD: ${{ secrets.RDS_PG_DB_PASSWORD }}
+      RDS_PG_DB: ${{ secrets.RDS_PG_DB }}
+      RDS_PG_DB_HOST_TEST: ${{ secrets.RDS_PG_DB_HOST_TEST }}
+      RDS_PG_DIALECT: ${{ secrets.RDS_PG_DIALECT }}
 
     strategy:
       matrix:
@@ -18,24 +24,24 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     
     # Service containers to run with `container-job`
-    services:
-      # Label used to access the service container
-      db:
-        # Docker Hub image
-        image: postgres:13
-        # Provide the password for postgres
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: database_test
-        ports:
-          - 5432:5432
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    # services:
+    #   # Label used to access the service container
+    #   db:
+    #     # Docker Hub image
+    #     image: postgres:13
+    #     # Provide the password for postgres
+    #     env:
+    #       POSTGRES_USER: postgres
+    #       POSTGRES_PASSWORD: postgres
+    #       POSTGRES_DB: database_test
+    #     ports:
+    #       - 5432:5432
+    #     # Set health checks to wait until postgres has started
+    #     options: >-
+    #       --health-cmd pg_isready
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 5
 
     steps:
     - uses: actions/checkout@v2
@@ -43,9 +49,19 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-2
+    - name: start RDS PG
+    - run: aws rds start-db-instance --db-instance-identifier pg-test-env --region us-east-2
     - run: npm ci
     - run: npm run build --if-present
-    - run: npm test
+    - run: npm testcd
+    - name: stop RDS PG
+    - run: aws rds stop-db-instance --db-instance-identifier pg-test-env --region us-east-2
 
     # - name: Generate deployment package
     #   run: zip -r deploy.zip . -x '*.git*' '**node_modules**'
