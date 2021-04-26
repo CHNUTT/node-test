@@ -18,28 +18,21 @@ jobs:
       RDS_PG_DIALECT_TEST: ${{ secrets.RDS_PG_DIALECT_TEST }}
 
     steps:
-      # - name: Configure AWS credentials from Test Environment
-      #   uses: aws-actions/configure-aws-credentials@v1
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: us-east-2
+      - name: Configure AWS credentials from Test Environment
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
 
-      
       # while status is not available keep checking before move to next step
-
       # if not go checkout code
 
-      # check the status is stop if it is start it
-      # - name: start rds postgres test database if it is in stopped stage
-      #   if: ${{aws rds describe-db-instances --db-instance-identifier pg-test-env --region us-east-2 | grep DBInstanceStatus == "stopped"}}
-      #   run: aws rds start-db-instance --db-instance-identifier pg-test-env --region us-east-2
-      
-      # - name: ensure rds is available before continue
-      #   if: ${{aws rds describe-db-instances --db-instance-identifier pg-test-env --region us-east-2 | grep DBInstanceStatus != "available"}}
-      #   uses: jakejarvis/wait-action@master
-      #   with:
-      #     time: '300s'
+      - name: start rds postgres test database
+        run: aws rds start-db-instance --db-instance-identifier pg-test-env --region us-east-2
+
+      - name: check available status
+        run: aws rds wait db-instance-available --db-instance-identifier pg-test-env --region us-east-2
 
       # - name: Create .env file
       #   run: touch .env
@@ -58,5 +51,5 @@ jobs:
       - run: npm run build --if-present
       - run: npm run test-cd
 
-      # - name: stop rds postgres test database
-      #   run: aws rds stop-db-instance --db-instance-identifier pg-test-env --region us-east-2
+      - name: stop rds postgres test database
+        run: aws rds stop-db-instance --db-instance-identifier pg-test-env --region us-east-2
