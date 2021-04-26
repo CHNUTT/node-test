@@ -27,7 +27,7 @@ jobs:
 
       # create rds pg instance
       - name: Create RDS PG - Test - Instance
-        run: aws rds create-db-instance --db-instance-identifier pg-test-2-env --db-instance-class db.t2.micro --engine postgres --master-username ${{ secrets.RDS_PG_DB_USER_TEST }} --master-user-password ${{ secrets.RDS_PG_DB_PASSWORD_TEST }} --publicly-accessible --db-name ${{ secrets.RDS_PG_DB_TEST }} --allocated-storage 20 
+        run: aws rds create-db-instance --db-instance-identifier pg-test-2-env --db-instance-class db.t2.micro --engine postgres --vpc-security-group-ids sg-0131327a167d135ee --master-username ${{ secrets.RDS_PG_DB_USER_TEST }} --master-user-password ${{ secrets.RDS_PG_DB_PASSWORD_TEST }} --publicly-accessible --db-name ${{ secrets.RDS_PG_DB_TEST }} --allocated-storage 20 
 
       # - name: start rds postgres test database
       #   run: aws rds start-db-instance --db-instance-identifier pg-test-env --region us-east-2
@@ -45,7 +45,7 @@ jobs:
       - run: npm run test-cd
 
       - name: Delete RDS PG - Test - Instance
-        run: delete-db-instance --db-instance-identifier pg-test-2-env
+        run: delete-db-instance --db-instance-identifier pg-test-2-env --skip-final-snapshot --delete-automated-backups
 
       # - name: stop rds postgres test database
       #   run: aws rds stop-db-instance --db-instance-identifier pg-test-env --region us-east-2
