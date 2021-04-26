@@ -20,10 +20,9 @@ if (config.production) {
       host: process.env[config.host],
       dialect: process.env[config.dialect],
       dialectOptions: {
-        // ssl: 'Amazon RDS',
         useUTC: false,
       },
-      ...(config.testproduction && { logging: false }),
+      // ...(config.testproduction && { logging: false }),
       pool: { maxConnections: 5, maxIdleTime: 30 },
       language: 'en',
       maxConcurrentQueries: 100,

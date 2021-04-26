@@ -7,12 +7,14 @@
     "test": "NODE_ENV=testci jest --verbose --coverage --detectOpenHandles --maxWorkers=1 --testTimeout=10000",
     "pretest": "NODE_ENV=testci npm run db:reset",
     "test-cd": "NODE_ENV=testcd jest --verbose --coverage --detectOpenHandles --maxWorkers=1 --testTimeout=10000 --forceExit",
+    "pretest-cd": "npx sequelize-cli db:migrate",
     "test-dev": "NODE_ENV=test PORT=3005 jest --verbose --watchAll --coverage --detectOpenHandles --maxWorkers=1 --testTimeout=10000",
     "pretest-dev": "NODE_ENV=test npm run db:reset",
     "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
     "start": "NODE_ENV=production node src/server.js",
     "start-dev": "NODE_ENV=production nodemon src/server.js",
     "dev": "nodemon src/server.js",
+    "predev": "npx sequelize-cli db:drop && npx sequelize-cli db:create",
     "build": "echo Build the application phase ....!!!"
   },
   "keywords": [

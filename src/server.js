@@ -22,16 +22,15 @@ app.use((error, req, res, next) => {
 
 const init = async function () {
   try {
-    if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'testci') {
+    if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'testci' && process.env.NODE_ENV !== 'testcd') {
       await require('./sequelize/models').sequelize.sync();
-      if (process.env.NODE_ENV !== 'testcd') {
         app.listen(PORT, () =>
           console.log(`Your application is running on port ${PORT}`)
         );
-      }
     }
     return app;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
