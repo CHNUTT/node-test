@@ -2,7 +2,7 @@ name: Pre CD with EB and RDS Test env
 
 on:
   pull_request:
-    branchs: [ master ]
+    branchs: [master]
 
 jobs:
   test-pre-cd:
@@ -25,31 +25,53 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
 
-      # while status is not available keep checking before move to next step
-      # if not go checkout code
+      # create rds pg instance
+      - name: Create RDS PG - Test - Instance
+        run: aws rds create-db-instance --db-instance-identifier pg-test-2-env --db-instance-class db.t2.micro --engine postgres --vpc-security-group-ids ${{ secrets.VPC_SECURITY_GROUP_ID_1 }} --master-username ${{ secrets.RDS_PG_DB_USER_TEST }} --master-user-password ${{ secrets.RDS_PG_DB_PASSWORD_TEST }} --publicly-accessible --db-name ${{ secrets.RDS_PG_DB_TEST }} --allocated-storage 20
 
-      - name: start rds postgres test database
-        run: aws rds start-db-instance --db-instance-identifier pg-test-env --region us-east-2
+      # - name: start rds postgres test database
+      #   run: aws rds start-db-instance --db-instance-identifier pg-test-env --region us-east-2
 
-      - name: check available status
-        run: aws rds wait db-instance-available --db-instance-identifier pg-test-env --region us-east-2
-
-      # - name: Create .env file
-      #   run: touch .env
-      #   run: echo RDS_PG_DB_USER = ${{ secrets.RDS_PG_DB_USER }}
-      #   run: echo RDS_PG_DB_PASSWORD = ${{ secrets.RDS_PG_DB_PASSWORD }}
-      #   run: echo RDS_PG_DB = ${{ secrets.RDS_PG_DB }}
-      #   run: echo RDS_PG_DB_HOST_TEST = ${{ secrets.RDS_PG_DB_HOST_TEST }}
-      #   run: echo RDS_PG_DIALECT = ${{ secrets.RDS_PG_DIALECT }}
+      - name: Check RDS PG Test available status
+        run: aws rds wait db-instance-available --db-instance-identifier pg-test-2-env --region us-east-2
 
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+
+      - name: Create config testcd file
+        run: |
+          touch src/sequelize/config/config_testcd.json
+          echo "write testcd config to file"
+          echo '{' >> src/sequelize/config/config_testcd.json
+          echo '  "testcd": {' >> src/sequelize/config/config_testcd.json
+          echo '    "production": true,' >> src/sequelize/config/config_testcd.json
+          echo '    "testproduction": true,' >> src/sequelize/config/config_testcd.json
+          echo '    "username": "${{ secrets.RDS_PG_DB_USER_TEST }}",' >> src/sequelize/config/config_testcd.json
+          echo '    "password": "${{ secrets.RDS_PG_DB_PASSWORD_TEST }}",' >> src/sequelize/config/config_testcd.json
+          echo '    "database": "${{ secrets.RDS_PG_DB_TEST }}",' >> src/sequelize/config/config_testcd.json
+          echo '    "host": "${{ secrets.RDS_PG_DB_HOST_TEST }}",' >> src/sequelize/config/config_testcd.json
+          echo '    "logging": false,' >> src/sequelize/config/config_testcd.json
+          echo '    "dialect": "${{ secrets.RDS_PG_DIALECT_TEST }}",' >> src/sequelize/config/config_testcd.json
+          echo '    "dialectOptions": {' >> src/sequelize/config/config_testcd.json
+          echo '      "ssl": {' >> src/sequelize/config/config_testcd.json
+          echo '        "rejectUnauthorized": false' >> src/sequelize/config/config_testcd.json
+          echo '      }' >> src/sequelize/config/config_testcd.json
+          echo '    }' >> src/sequelize/config/config_testcd.json
+          echo '  }' >> src/sequelize/config/config_testcd.json
+          echo '}' >> src/sequelize/config/config_testcd.json
+
       - run: npm ci
       - run: npm run build --if-present
       - run: npm run test-cd
 
-      - name: stop rds postgres test database
-        run: aws rds stop-db-instance --db-instance-identifier pg-test-env --region us-east-2
+      - name: Remove config_testcd file
+        run: rm src/sequelize/config/config_testcd.json
+
+      - name: Delete RDS PG - Test - Instance
+        run: aws rds delete-db-instance --db-instance-identifier pg-test-2-env --skip-final-snapshot --delete-automated-backups
+
+      # - name: stop rds postgres test database
+      #   run: aws rds stop-db-instance --db-instance-identifier pg-test-env --region us-east-2

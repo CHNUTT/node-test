@@ -11,7 +11,7 @@ const init = require('../../../src/server');
 let app;
 
 describe('POST /api/user - validation firstName', () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     app = await init();
   });
   afterEach(() => {
